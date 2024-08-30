@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book A Table</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <style>
+        #book-a-table {
+            background-color: #FAFAFA;
+            padding: 50px 0;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            margin: 50px 0;
+            width: 100%;
+        }
+        body {
+            background-color: black;
+        }
+        .form-control, .btn {
+            margin-bottom: 15px;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('reservationForm').addEventListener('submit', async function(event) {
+                event.preventDefault();
+                
+                const form = event.target;
+                const formData = new FormData(form);
+                const data = {};
+                formData.forEach((value, key) => { data[key] = value });
+
+                try {
+                    const response = await fetch('/reservation', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (response.ok) {
+                        const result = await response.text();
+                        alert(result);
+                    } else {
+                        alert('Error submitting reservation');
+                    }
+                } catch (error) {
+                    console.error('Error during reservation:', error);
+                    alert('An error occurred during reservation.');
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <section id="book-a-table" class="book-a-table">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 offset-md-2 text-center">
+                    <h2 class="text-primary">Book A Table</h2>
+                </div>
+            </div>
+            <form id="reservationForm">
+                <div class="form-row">
+                    <div class="col-lg-4 col-md-6 form-group">
+                        <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="col-lg-4 col-md-6 form-group">
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="col-lg-4 col-md-6 form-group">
+                        <input type="number" class="form-control" name="phone" id="phone" placeholder="Your Phone" required>
+                    </div>
+                    <div class="col-lg-4 col-md-6 form-group">
+                        <input type="date" name="bookingDate" class="form-control" id="date" placeholder="Date" required>
+                    </div>
+                    <div class="col-lg-4 col-md-6 form-group">
+                        <input type="time" class="form-control" name="time" id="time" placeholder="Time" required>
+                    </div>
+                    <div class="col-lg-4 col-md-6 form-group">
+                        <input type="number" class="form-control" name="people" id="people" placeholder="No. of people" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary float-right mt-3">Book a Table</button>
+            </form>
+        </div>
+    </section>
+</body>
+</html>
